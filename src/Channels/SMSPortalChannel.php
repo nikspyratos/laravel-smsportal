@@ -59,7 +59,9 @@ class SMSPortalChannel
             ]
         ]);
 
-        Cache::tags('smsportal')->put($response['eventId'], $notifiable->getKey());
+        if( isset( $response['eventId'] ) ){
+            Cache::tags('smsportal')->put($response['eventId'], $notifiable->getKey());
+        }
 
         return $response;
     }
