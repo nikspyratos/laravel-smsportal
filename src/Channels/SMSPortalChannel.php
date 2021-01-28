@@ -3,6 +3,8 @@
 namespace Illuminate\Notifications\Channels;
 
 use NeoLikotsi\SMSPortal\RestClient;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\SMSPortalMessage;
 
@@ -48,7 +50,7 @@ class SMSPortalChannel
             $message = new SMSPortalMessage($message);
         }
 
-        return $this->smsPortal->message()->send([
+        $response = $this->smsPortal->message()->send([
             'messages' => [
                 [
                     'destination' => $to,
@@ -56,5 +58,11 @@ class SMSPortalChannel
                 ]
             ]
         ]);
+
+        if( isset( $response['eventId'] ) ){
+            Cache::tags('smsportal')->put($response['eventId'], $notifiable->getKey());
+        }
+
+        return $response;
     }
 }
