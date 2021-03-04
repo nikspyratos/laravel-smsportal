@@ -1,5 +1,5 @@
 {
-  "name": "neolikotsi/laravel-smsportal",
+  "name": "rouxtaccess/laravel-smsportal",
   "description": "SMS Portal Notification Channel for laravel",
   "keywords": ["laravel", "notifications", "sms portal"],
   "license": "MIT",
@@ -7,7 +7,12 @@
     "name": "Neo Likotsi",
     "email": "nlikotsi5@gmail.com",
     "role": "Developer"
-  }],
+  },
+    {
+      "name": "John Roux",
+      "email": "john.roux1@gmail.com",
+      "role": "Developer"
+    }],
   "require": {
     "php" : ">=7.0",
     "illuminate/config": "~5.0|~6.0|~7.0",

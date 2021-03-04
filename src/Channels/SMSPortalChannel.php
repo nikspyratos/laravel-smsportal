@@ -2,6 +2,7 @@
 
 namespace Illuminate\Notifications\Channels;
 
+use Illuminate\Notifications\DatabaseNotification;
 use NeoLikotsi\SMSPortal\RestClient;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Notifications\Notification;
@@ -59,11 +60,17 @@ class SMSPortalChannel
         ]);
 
         if( isset( $response['eventId'] ) ){
-            Cache::tags('smsportal')->put($response['eventId'], [
-                'notifiable_model' => get_class($notifiable),
-                'notifiable_model_key' => $notifiable->getKey(),
-                'notification_model' => get_class($notification),
-            ]);
+            if($notification->savedNotification && $notification->savedNotification instanceof DatabaseNotification)
+            {
+                $notification->savedNotification->update(['data->eventId' =>  $response['eventId']]);
+            }
+            else{
+                Cache::tags('smsportal')->put($response['eventId'], [
+                    'notifiable_model' => get_class($notifiable),
+                    'notifiable_model_key' => $notifiable->getKey(),
+                    'notification_model' => get_class($notification),
+                ]);
+            }
         }
 
         return $this->smsPortal;
