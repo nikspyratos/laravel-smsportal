@@ -2,6 +2,7 @@
 
 namespace Illuminate\Notifications\Channels;
 
+use Carbon\Carbon;
 use Illuminate\Notifications\DatabaseNotification;
 use NeoLikotsi\SMSPortal\RestClient;
 use Illuminate\Support\Facades\Cache;
@@ -62,7 +63,7 @@ class SMSPortalChannel
         if( isset( $response['eventId'] ) ){
             if($notification->savedNotification && $notification->savedNotification instanceof DatabaseNotification)
             {
-                $notification->savedNotification->update(['data->eventId' =>  $response['eventId']]);
+                $notification->savedNotification->update(['data->eventId' =>  $response['eventId'], 'sent_at' => Carbon::now()]);
             }
             else{
                 Cache::tags('smsportal')->put($response['eventId'], [
